@@ -12,19 +12,12 @@ def load_and_preprocess_data(filepath):
     # TODO: Implement this function
     dataset = pd.read_csv(filepath)
     
-    #remove `GarbageValues` from the dataset
-    if 'GarbageValues' in dataset.columns:
-        dataset.drop(columns=['GarbageValues'], inplace=True)
+    # Remove garbage values column if it exists
+    if 'GarbageValues' in data.columns:
+        data = data.drop(columns=['GarbageValues'])
     
-    # Handle missing values (taking mean of the column)
-    dataset.fillna(dataset.mean(), inplace=True)
-    
-    # Handle categorical data (encode the categorical data)
-    for column in dataset.select_dtypes(include=['object']).columns:
-        le = LabelEncoder()
-        dataset[column] = le.fit_transform(dataset[column])
-        label_encoders[column] = le
-    
+    # Drop rows with missing values
+    data = data.dropna()
     
     #Separate the features and target
     X = datadet.drop('Outcome',axis=1)
@@ -39,7 +32,7 @@ def load_and_preprocess_data(filepath):
 def split_and_standardize(X, y):
     # TODO: Implement this function
     # Split the data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=12)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=50)
     
     # Standardize the data
     scaler = StandardScaler()
@@ -58,11 +51,12 @@ def split_and_standardize(X, y):
 def create_model(X_train, y_train):
     # TODO: Implement this function
     # Create and train the first model
-    model1 = MLPClassifier(hidden_layer_sizes=(100, 100), max_iter=1000, random_state=12)
+    model1 = MLPClassifier(hidden_layer_sizes=(128,64, 32), max_iter=3000, random_state=50, learning_rate='adaptive', activation='relu', solver='adam', alpha=0.0001)
+
     model1.fit(X_train, y_train)
     
     # Create and train the second model
-    model2 = MLPClassifier(hidden_layer_sizes=(100, 100, 100), max_iter=1000, random_state=12)
+    model2 = MLPClassifier(hidden_layer_sizes=(64, 32, 16), max_iter=3000, random_state=50, learning_rate='constant', activation='tanh', solver='sgd', alpha=0.0005)
     model2.fit(X_train, y_train)
     
     return model1, model2
@@ -76,4 +70,18 @@ def create_model(X_train, y_train):
 def predict_and_evaluate(model, X_test, y_test):
     # TODO: Implement this function
     # Predict the target values
+    y_pred = model.predict(X_test)
     
+    # Calculate the evaluation metrics
+    accuracy = accuracy_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred)
+    recall = recall_score(y_test, y_pred)
+    fscore = f1_score(y_test, y_pred)
+    confusion = confusion_matrix(y_test, y_pred)
+    print ('accuracy:', accuracy)
+    print ('precision:', precision)
+    print ('recall:', recall)
+    print ('fscore:', fscore)
+    print ('confusion:', confusion)
+    
+    return accuracy, precision, recall, fscore, confusion
