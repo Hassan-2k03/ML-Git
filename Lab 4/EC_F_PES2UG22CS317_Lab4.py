@@ -74,11 +74,5 @@ def predict_and_evaluate(model, X_test, y_test):
     precision = precision_score(y_test, y_pred, average='weighted', zero_division=1)
     recall = recall_score(y_test, y_pred, average='weighted', zero_division=1)
     fscore = f1_score(y_test, y_pred, average='weighted', zero_division=1)
-    confusion = confusion_matrix(y_test, y_pred, labels=[0, 1])
-    print ('accuracy:', accuracy)
-    print ('precision:', precision)
-    print ('recall:', recall)
-    print ('fscore:', fscore)
-    print ('confusion:', confusion)
-    
+    confusion = confusion_matrix(y_test, y_pred, labels=[0, 1]) 
     return accuracy, precision, recall, fscore, confusion
