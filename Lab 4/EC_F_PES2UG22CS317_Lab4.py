@@ -49,12 +49,11 @@ def split_and_standardize(X, y):
 def create_model(X_train, y_train):
     # TODO: Implement this function
     # Create and train the first model
-    model1 = MLPClassifier(hidden_layer_sizes=(128,64, 32), max_iter=3000, random_state=50, learning_rate='adaptive', activation='relu', solver='adam', alpha=0.0001)
-
+    model1 = MLPClassifier(hidden_layer_sizes=(128,64, 32), max_iter=2000, random_state=50, learning_rate='adaptive', activation='relu', solver='adam', alpha=0.0001)
     model1.fit(X_train, y_train)
     
     # Create and train the second model
-    model2 = MLPClassifier(hidden_layer_sizes=(256, 128, 64 ), max_iter=3000, random_state=50, learning_rate='constant', activation='tanh', solver='sgd', alpha=0.0005)
+    model2 = MLPClassifier(hidden_layer_sizes=(128,64, 32), max_iter=2000, random_state=50, learning_rate='constant', activation='tanh', solver='sgd', alpha=0.0005)
     model2.fit(X_train, y_train)
     
     return model1, model2
