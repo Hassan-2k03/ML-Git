@@ -40,8 +40,6 @@ def split_and_standardize(X, y):
     X_test = scaler.transform(X_test)
     
     return X_train, X_test, y_train, y_test
-
-    
    
 
 # Create and train 2 MLP classifiers with different parameters
