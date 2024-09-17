@@ -32,7 +32,7 @@ def load_and_preprocess_data(filepath):
 def split_and_standardize(X, y):
     # TODO: Implement this function
     # Split the data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=50)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=50)
     
     # Standardize the data
     scaler = StandardScaler()
@@ -74,5 +74,5 @@ def predict_and_evaluate(model, X_test, y_test):
     precision = precision_score(y_test, y_pred, average='weighted', zero_division=1)
     recall = recall_score(y_test, y_pred, average='weighted', zero_division=1)
     fscore = f1_score(y_test, y_pred, average='weighted', zero_division=1)
-    confusion = confusion_matrix(y_test, y_pred, labels=[0, 1]) 
+    confusion = confusion_matrix(y_test, y_pred, labels=[0, 1])    
     return accuracy, precision, recall, fscore, confusion
