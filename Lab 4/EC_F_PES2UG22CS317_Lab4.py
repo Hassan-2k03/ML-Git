@@ -13,14 +13,14 @@ def load_and_preprocess_data(filepath):
     dataset = pd.read_csv(filepath)
     
     # Remove garbage values column if it exists
-    if 'GarbageValues' in data.columns:
-        data = data.drop(columns=['GarbageValues'])
+    if 'GarbageValues' in dataset.columns:
+        dataset = dataset.drop(columns=['GarbageValues'])
     
     # Drop rows with missing values
-    data = data.dropna()
+    dataset = dataset.dropna()
     
     #Separate the features and target
-    X = datadet.drop('Outcome',axis=1)
+    X = dataset.drop('Outcome',axis=1)
     Y = dataset['Outcome'] 
     
     return X, Y
@@ -54,7 +54,7 @@ def create_model(X_train, y_train):
     model1.fit(X_train, y_train)
     
     # Create and train the second model
-    model2 = MLPClassifier(hidden_layer_sizes=(64, 32, 16), max_iter=3000, random_state=50, learning_rate='constant', activation='tanh', solver='sgd', alpha=0.0005)
+    model2 = MLPClassifier(hidden_layer_sizes=(256, 128, 64 ), max_iter=3000, random_state=50, learning_rate='constant', activation='tanh', solver='sgd', alpha=0.0005)
     model2.fit(X_train, y_train)
     
     return model1, model2
@@ -71,11 +71,11 @@ def predict_and_evaluate(model, X_test, y_test):
     y_pred = model.predict(X_test)
     
     # Calculate the evaluation metrics
-    accuracy = accuracy_score(y_test, y_pred)
-    precision = precision_score(y_test, y_pred)
-    recall = recall_score(y_test, y_pred)
-    fscore = f1_score(y_test, y_pred)
-    confusion = confusion_matrix(y_test, y_pred)
+    accuracy = accuracy_score(y_test, y_pred, normalize=True)
+    precision = precision_score(y_test, y_pred, average='weighted', zero_division=1)
+    recall = recall_score(y_test, y_pred, average='weighted', zero_division=1)
+    fscore = f1_score(y_test, y_pred, average='weighted', zero_division=1)
+    confusion = confusion_matrix(y_test, y_pred, labels=[0, 1])
     print ('accuracy:', accuracy)
     print ('precision:', precision)
     print ('recall:', recall)
