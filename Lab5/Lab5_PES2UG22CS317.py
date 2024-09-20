@@ -17,7 +17,14 @@ class SVM_Classification:
         :param dataset_path: The file path to the dataset in JSON format.
         :return: Features (X) and target variable (y).
         """
-        pass
+        # read the date from the JSON file
+        data = pd.read_json(dataset_path)
+        
+        # split the data into features and target variable
+        X = data.drop('target', axis=1)
+        y = data['target']
+        
+        return X, y
 
     def preprocess(self, X, y):
         """
@@ -28,7 +35,14 @@ class SVM_Classification:
         :param y: Target (output variable).
         :return: Preprocessed features (X) and target (y).
         """
-        pass
+        # handle missing values
+        X.fillna(X.mean(), inplace=True)
+        
+        # standardize the features using StandardScaler
+        scaler = StandardScaler()
+        X = scaler.fit_transform(X)
+        
+        return X, y
 
     def train_classification_model(self, X_train, y_train):
         """
@@ -38,7 +52,11 @@ class SVM_Classification:
         :param X_train: Training set features.
         :param y_train: Training set labels.
         """
-        pass
+        # initialize the SVC model
+        self.model = SVC()
+        
+        # train the model on the training data
+        self.model.fit(X_train, y_train)
 
     def predict_accuracy(self, X_test, y_test):
         # Predict the target values using the test data
@@ -46,6 +64,10 @@ class SVM_Classification:
         
         # Calculate and return the accuracy score between true values and predicted values
         accuracy = accuracy_score(y_test, y_pred)
+        
+        #print(accuracy)
+        #print("Accuracy on classification model: ", accuracy)
+        
         return accuracy
 
 
@@ -62,6 +84,15 @@ class SVM_Regression:
         :param dataset_path: The file path to the dataset in JSON format.
         :return: Features (X) and target variable (y).
         """
+         # read the date from the JSON file
+        data = pd.read_json(dataset_path)
+        
+        # split the data into features and target variable
+        X = data.drop('alcohol', axis=1)
+        y = data['alcohol']
+        
+        return X, y
+        
         pass
 
     def preprocess(self, X, y):
@@ -73,8 +104,15 @@ class SVM_Regression:
         :param y: Target (output variable).
         :return: Preprocessed features (X) and target (y).
         """
-        pass
-
+        # handle missing values
+        X.fillna(X.mean(), inplace=True)
+        
+        # standardize the features using StandardScaler
+        scaler = StandardScaler()
+        X = scaler.fit_transform(X)
+        
+        return X, y
+    
     def train_regression_model(self, X_train, y_train):
         """
         YOUR CODE HERE
@@ -83,7 +121,11 @@ class SVM_Regression:
         :param X_train: Training set features.
         :param y_train: Training set target values.
         """
-        pass
+        # initialize the SVR model
+        self.model = SVR()
+        
+        # train the model on the training data
+        self.model.fit(X_train, y_train)
 
     def predict_accuracy(self, X_test, y_test):
         # Predict the target values using the test data
@@ -91,6 +133,11 @@ class SVM_Regression:
         
         # Calculate mean absolute percentage error (MAPE) and subtract from 1 to get accuracy
         err = mean_absolute_percentage_error(y_test, y_pred)
+        
+        #print error and accuracy
+        #print("Error on regression model: ", err)
+        #print("Accuracy on regression model: ", 1 - err)
+        
         return 1 - err
 
 
@@ -127,7 +174,14 @@ class SVM_Spiral:
         :param dataset_path: The file path to the dataset in JSON format.
         :return: Features (X) and target variable (y).
         """
-        pass
+        # read the date from the JSON file
+        data = pd.read_json(dataset_path)
+        
+        # split the data into features and target variable
+        X = data.drop('targets', axis=1)
+        y = data['targets']
+        
+        return X, y
 
     def preprocess(self, X, y):
         """
@@ -138,8 +192,16 @@ class SVM_Spiral:
         :param y: Target (output variable).
         :return: Preprocessed features (X) and target (y).
         """
-        pass
+        # handle missing values
+        X.fillna(X.mean(), inplace=True)
+        
+        # standardize the features using StandardScaler
+        scaler = StandardScaler()
+        X = scaler.fit_transform(X)
+        
+        return X, y
 
+        
     def train_spiral_model(self, X_train, y_train):
         """
         YOUR CODE HERE
@@ -148,7 +210,11 @@ class SVM_Spiral:
         :param X_train: Training set features.
         :param y_train: Training set labels.
         """
-        pass
+        # initialize the SVC model with a suitable kernel
+        self.model = SVC(kernel='rbf', gamma=10, C=10)
+        
+        # train the model on the training data
+        self.model.fit(X_train, y_train)
 
     def predict_accuracy(self, X_test, y_test):
         # Predict the target values using the test data
@@ -156,4 +222,8 @@ class SVM_Spiral:
         
         # Calculate and return the accuracy score between true values and predicted values
         accuracy = accuracy_score(y_test, y_pred)
+        
+        #print accuracy
+        #print("Accuracy on spiral: ", accuracy)
+        
         return accuracy
