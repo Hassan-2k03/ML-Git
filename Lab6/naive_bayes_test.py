@@ -1,6 +1,6 @@
 from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
-from naive_bayes_SRN import NaiveBayesClassifier
+from naive_bayes_pes2ug22cs317 import NaiveBayesClassifier
 import warnings
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
