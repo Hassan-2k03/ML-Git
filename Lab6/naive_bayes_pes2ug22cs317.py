@@ -23,6 +23,21 @@ class NaiveBayesClassifier:
         """
         # TO DO 
         
+        cleaned_sentences = []
+        cleaned_categories = []
+
+        for sentence, category in zip(sentences, categories):
+            if category is None or category == "wrong_label":
+                continue  # Skip sentences with missing or incorrect labels
+
+            words = sentence.lower().split()  # Convert sentence to lowercase and split into words
+            filtered_words = [word for word in words if word not in ENGLISH_STOP_WORDS]
+            cleaned_sentences.append(' '.join(filtered_words))
+            cleaned_categories.append(category)
+
+        return cleaned_sentences, cleaned_categories
+
+        
     @staticmethod
     def fit(X, y):
         """
@@ -41,10 +56,29 @@ class NaiveBayesClassifier:
         
         class_probs = {}
         word_probs = {}
-       
-       # TO DO
+
+        classes, class_counts = np.unique(y, return_counts=True)
+        total_samples = len(y)
+
+        # Calculate prior probabilities P(C)
+        for class_label, class_count in zip(classes, class_counts):
+            class_probs[class_label] = class_count / total_samples
+
+        # Calculate conditional probabilities P(W|C) with Laplace smoothing
+        num_classes = len(classes)
+        vocab_size = X.shape[1]
+        word_counts = {class_label: np.zeros(vocab_size) for class_label in classes}
+
+        for i, class_label in enumerate(y):
+            if class_label in classes:
+                word_counts[class_label] += X[i]
+
+        for class_label in classes:
+            total_words_in_class = np.sum(word_counts[class_label])
+            word_probs[class_label] = (word_counts[class_label] + 1) / (total_words_in_class + vocab_size)
 
         return class_probs, word_probs
+
 
     @staticmethod
     def predict(X, class_probs, word_probs, classes):
@@ -63,8 +97,22 @@ class NaiveBayesClassifier:
         """
         predictions = []
 
-        # TO DO
+        for doc in X:
+            log_probs = {}
+            for class_label in classes:
+                log_prob = np.log(class_probs[class_label])  # Start with the log of the prior
 
+                # Add log of the conditional probabilities for each word
+                for i, word_present in enumerate(doc):
+                    if word_present == 1:
+                        log_prob += np.log(word_probs[class_label][i])
+                    else:
+                        log_prob += np.log(1 - word_probs[class_label][i])
+
+                log_probs[class_label] = log_prob
+            # Predict the class with the highest log probability
+            predicted_class = max(log_probs, key=log_probs.get)
+            predictions.append(predicted_class)
+            
         return predictions
-
     
