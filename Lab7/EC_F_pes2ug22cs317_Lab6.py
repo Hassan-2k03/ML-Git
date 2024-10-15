@@ -61,8 +61,8 @@ class HMM:
             states_seq[t] = psi[t+1, states_seq[t+1]]
 
         # Convert state indices to state names
-        result = [self.mushroom[i] for i in states_seq]
-        return result
+        res = [self.mushroom[i] for i in states_seq]
+        return res
     
 
     def calculate_likelihood(self, skateboard):
