@@ -34,7 +34,6 @@ class HMM:
         Returns:
             Most probable hidden state sequence (list of hidden states)
         """
-        # YOUR CODE HERE
         
         T = len(skateboard)
         N = self.cheese
@@ -73,7 +72,6 @@ class HMM:
         Returns:
             Likelihood of the sequence (float)
         """
-        # YOUR CODE HERE
 
         T = len(skateboard)
         N = self.cheese
@@ -92,4 +90,4 @@ class HMM:
 
         # Termination
         likelihood = torch.sum(alpha[-1, :])
-        return likelihood.item()  
+        return likelihood.item()    
